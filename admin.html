@@ -1,0 +1,1055 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Electrilindas – Admin</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --purple:  #5b3ff8;
+      --purple2: #7c5cfc;
+      --dark:    #111118;
+      --bg:      #f0eff5;
+      --surface: #ffffff;
+      --border:  rgba(91,63,248,0.14);
+      --text:    #0f0f17;
+      --muted:   #6b7280;
+      --ok:      #10b981;
+      --err:     #ef4444;
+      --warn:    #f59e0b;
+    }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* ─── LOGIN SCREEN ─── */
+    #login-screen {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--dark);
+      position: relative;
+      overflow: hidden;
+    }
+    #login-screen::before {
+      content: '';
+      position: absolute;
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(91,63,248,.2) 0%, transparent 70%);
+      top: 50%; left: 50%;
+      transform: translate(-50%,-50%);
+    }
+    .login-box {
+      position: relative;
+      z-index: 1;
+      background: rgba(255,255,255,.05);
+      border: 1px solid rgba(255,255,255,.1);
+      border-radius: 24px;
+      padding: 48px 40px;
+      width: 100%;
+      max-width: 400px;
+      text-align: center;
+    }
+    .login-logo {
+      font-size: 2rem;
+      margin-bottom: 6px;
+    }
+    .login-title {
+      font-size: 1.3rem;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 4px;
+    }
+    .login-sub {
+      font-size: .82rem;
+      color: rgba(255,255,255,.4);
+      margin-bottom: 32px;
+    }
+    .login-field {
+      margin-bottom: 14px;
+      text-align: left;
+    }
+    .login-field label {
+      display: block;
+      font-size: .72rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      color: rgba(255,255,255,.4);
+      margin-bottom: 6px;
+    }
+    .login-field input {
+      width: 100%;
+      background: rgba(255,255,255,.07);
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 10px;
+      padding: 13px 16px;
+      color: #fff;
+      font-family: inherit;
+      font-size: .9rem;
+      outline: none;
+      transition: border-color .18s;
+    }
+    .login-field input:focus { border-color: var(--purple2); }
+    .login-field input::placeholder { color: rgba(255,255,255,.2); }
+    .login-btn {
+      width: 100%;
+      background: var(--purple);
+      color: #fff;
+      border: none;
+      padding: 14px;
+      border-radius: 50px;
+      font-family: inherit;
+      font-weight: 700;
+      font-size: .9rem;
+      cursor: pointer;
+      margin-top: 8px;
+      transition: transform .15s, box-shadow .15s;
+    }
+    .login-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(91,63,248,.4); }
+    .login-error {
+      margin-top: 12px;
+      font-size: .8rem;
+      color: var(--err);
+      font-weight: 600;
+      display: none;
+    }
+    .login-error.show { display: block; }
+
+    /* ─── CMS LAYOUT ─── */
+    #cms-screen { display: none; }
+    #cms-screen.show { display: flex; min-height: 100vh; }
+
+    /* ─── SIDEBAR ─── */
+    .sidebar {
+      width: 240px;
+      flex-shrink: 0;
+      background: var(--dark);
+      display: flex;
+      flex-direction: column;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+    }
+    .sb-logo {
+      padding: 24px 20px 18px;
+      border-bottom: 1px solid rgba(255,255,255,.07);
+      margin-bottom: 10px;
+    }
+    .sb-logo-name {
+      font-size: 1rem;
+      font-weight: 800;
+      color: #fff;
+    }
+    .sb-logo-name span { color: var(--purple2); }
+    .sb-logo-sub {
+      font-size: .7rem;
+      color: rgba(255,255,255,.25);
+      margin-top: 2px;
+    }
+    .sb-group-label {
+      font-size: .65rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .12em;
+      color: rgba(255,255,255,.25);
+      padding: 10px 20px 4px;
+    }
+    .sb-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 20px;
+      font-size: .82rem;
+      font-weight: 500;
+      color: rgba(255,255,255,.5);
+      cursor: pointer;
+      border-left: 2px solid transparent;
+      transition: color .15s, background .15s, border-color .15s;
+      text-decoration: none;
+    }
+    .sb-item:hover { color: #fff; background: rgba(255,255,255,.04); }
+    .sb-item.active {
+      color: #fff;
+      border-left-color: var(--purple2);
+      background: rgba(91,63,248,.15);
+      font-weight: 600;
+    }
+    .sb-bottom {
+      margin-top: auto;
+      padding: 16px 20px;
+      border-top: 1px solid rgba(255,255,255,.07);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .sb-bottom a {
+      font-size: .75rem;
+      color: rgba(255,255,255,.3);
+      text-decoration: none;
+      transition: color .15s;
+    }
+    .sb-bottom a:hover { color: rgba(255,255,255,.7); }
+    .sb-logout {
+      font-size: .75rem;
+      color: rgba(239,68,68,.5);
+      cursor: pointer;
+      background: none;
+      border: none;
+      font-family: inherit;
+      padding: 0;
+      text-align: left;
+      transition: color .15s;
+    }
+    .sb-logout:hover { color: var(--err); }
+
+    /* ─── MAIN ─── */
+    .cms-main {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+    }
+    .topbar {
+      background: #fff;
+      border-bottom: 1px solid var(--border);
+      padding: 14px 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      gap: 16px;
+    }
+    .topbar-left { min-width: 0; }
+    .topbar-section-name { font-weight: 800; font-size: .95rem; }
+    .topbar-status {
+      font-size: .72rem;
+      margin-top: 2px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .status-dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .dot-ok   { background: var(--ok); }
+    .dot-warn { background: var(--warn); }
+    .dot-err  { background: var(--err); }
+    .topbar-actions { display: flex; gap: 8px; align-items: center; flex-shrink: 0; }
+
+    .btn-save {
+      background: var(--purple);
+      color: #fff;
+      border: none;
+      padding: 9px 22px;
+      border-radius: 50px;
+      font-family: inherit;
+      font-weight: 700;
+      font-size: .82rem;
+      cursor: pointer;
+      transition: transform .15s, box-shadow .15s, opacity .15s;
+    }
+    .btn-save:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(91,63,248,.35); }
+    .btn-save:disabled { opacity: .45; cursor: not-allowed; }
+    .btn-outline {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid rgba(0,0,0,.15);
+      padding: 9px 18px;
+      border-radius: 50px;
+      font-family: inherit;
+      font-weight: 600;
+      font-size: .82rem;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      transition: border-color .15s, color .15s;
+    }
+    .btn-outline:hover { border-color: var(--purple); color: var(--purple); }
+
+    /* ─── STATUS TOAST ─── */
+    #toast {
+      position: fixed;
+      bottom: 28px;
+      left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      background: var(--dark);
+      color: #fff;
+      padding: 12px 24px;
+      border-radius: 50px;
+      font-size: .82rem;
+      font-weight: 600;
+      box-shadow: 0 8px 32px rgba(0,0,0,.3);
+      opacity: 0;
+      transition: opacity .25s, transform .25s;
+      pointer-events: none;
+      z-index: 999;
+      white-space: nowrap;
+    }
+    #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+    #toast.ok   { background: var(--ok); }
+    #toast.err  { background: var(--err); }
+
+    /* ─── SECTIONS ─── */
+    .cms-section { display: none; padding: 28px; max-width: 860px; }
+    .cms-section.active { display: block; }
+
+    /* ─── CARDS ─── */
+    .field-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 18px;
+    }
+    .field-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 16px;
+      margin-bottom: 18px;
+      border-bottom: 1px solid var(--border);
+    }
+    .field-card-header h3 { font-size: .9rem; font-weight: 800; }
+
+    /* ─── FORM FIELDS ─── */
+    .fg { margin-bottom: 14px; }
+    .fg label {
+      display: block;
+      font-size: .7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      color: var(--muted);
+      margin-bottom: 5px;
+    }
+    .fg input, .fg textarea, .fg select {
+      width: 100%;
+      background: var(--bg);
+      border: 1.5px solid rgba(91,63,248,.14);
+      border-radius: 9px;
+      padding: 10px 13px;
+      font-family: inherit;
+      font-size: .875rem;
+      font-weight: 400;
+      color: var(--text);
+      outline: none;
+      transition: border-color .15s, background .15s;
+    }
+    .fg input:focus, .fg textarea:focus, .fg select:focus {
+      border-color: var(--purple);
+      background: #fff;
+    }
+    .fg textarea { resize: vertical; min-height: 76px; }
+    .fg-hint { font-size: .7rem; color: var(--muted); margin-top: 4px; }
+    .fg-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .fg-row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+
+    /* ─── REPEAT ITEMS ─── */
+    .repeat-list { display: flex; flex-direction: column; gap: 12px; margin-bottom: 14px; }
+    .ri {
+      background: var(--bg);
+      border: 1.5px solid rgba(91,63,248,.1);
+      border-radius: 12px;
+      padding: 16px;
+    }
+    .ri-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+      font-size: .7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      color: var(--muted);
+    }
+    .btn-del {
+      width: 28px; height: 28px;
+      border-radius: 7px;
+      background: none;
+      border: 1.5px solid rgba(239,68,68,.25);
+      color: var(--err);
+      cursor: pointer;
+      font-size: .85rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background .15s;
+      flex-shrink: 0;
+    }
+    .btn-del:hover { background: rgba(239,68,68,.08); }
+    .btn-add-row {
+      width: 100%;
+      background: rgba(91,63,248,.06);
+      border: 1.5px dashed rgba(91,63,248,.25);
+      color: var(--purple);
+      border-radius: 10px;
+      padding: 10px;
+      font-family: inherit;
+      font-size: .82rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background .15s;
+    }
+    .btn-add-row:hover { background: rgba(91,63,248,.12); }
+
+    /* ─── CONFIG ─── */
+    .config-info {
+      background: rgba(91,63,248,.06);
+      border: 1px solid rgba(91,63,248,.15);
+      border-radius: 12px;
+      padding: 18px 20px;
+      margin-bottom: 20px;
+    }
+    .config-info h4 { font-size: .875rem; font-weight: 700; margin-bottom: 6px; color: var(--purple); }
+    .config-info p  { font-size: .8rem; color: var(--muted); line-height: 1.55; }
+    .config-info a  { color: var(--purple); }
+    .config-info ol { margin: 8px 0 0 18px; font-size: .8rem; color: var(--muted); line-height: 2; }
+
+    .token-warn {
+      background: rgba(245,158,11,.08);
+      border: 1px solid rgba(245,158,11,.2);
+      border-radius: 10px;
+      padding: 12px 16px;
+      font-size: .78rem;
+      color: #92400e;
+      line-height: 1.5;
+      margin-bottom: 16px;
+    }
+
+    /* ─── CONNECTED BADGE ─── */
+    .gh-connected {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: rgba(16,185,129,.1);
+      color: #065f46;
+      font-size: .72rem;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 50px;
+    }
+    .gh-connected::before {
+      content: '';
+      width: 6px; height: 6px;
+      background: var(--ok);
+      border-radius: 50%;
+      animation: blink 2s infinite;
+    }
+    .gh-disconnected {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: rgba(239,68,68,.1);
+      color: #991b1b;
+      font-size: .72px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 50px;
+    }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.35} }
+
+    @media (max-width: 700px) {
+      .sidebar { display: none; }
+      .fg-row, .fg-row-3 { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══════════════════
+  LOGIN SCREEN
+══════════════════ -->
+<div id="login-screen">
+  <div class="login-box">
+    <div class="login-logo">⚡</div>
+    <div class="login-title">Electrilindas</div>
+    <div class="login-sub">Panel de administración</div>
+
+    <div class="login-field">
+      <label>Contraseña</label>
+      <input id="pw-input" type="password" placeholder="••••••••••••••" autocomplete="current-password"
+             onkeydown="if(event.key==='Enter') doLogin()" />
+    </div>
+    <button class="login-btn" onclick="doLogin()">Ingresar →</button>
+    <div class="login-error" id="login-error">Contraseña incorrecta. Intentá de nuevo.</div>
+  </div>
+</div>
+
+<!-- ══════════════════
+  CMS SCREEN
+══════════════════ -->
+<div id="cms-screen">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sb-logo">
+      <div class="sb-logo-name">⚡ <span>Electrilindas</span></div>
+      <div class="sb-logo-sub">Panel CMS</div>
+    </div>
+
+    <div class="sb-group-label">Contenido</div>
+    <div class="sb-item active" onclick="goTo('hero')"         data-s="hero">         🏠 Hero</div>
+    <div class="sb-item"       onclick="goTo('about')"        data-s="about">        💜 Nosotras</div>
+    <div class="sb-item"       onclick="goTo('services')"     data-s="services">     🔧 Servicios</div>
+    <div class="sb-item"       onclick="goTo('testimonials')" data-s="testimonials"> ⭐ Testimonios</div>
+    <div class="sb-item"       onclick="goTo('contact')"      data-s="contact">      📲 Contacto</div>
+
+    <div class="sb-group-label" style="margin-top:10px;">Sistema</div>
+    <div class="sb-item" onclick="goTo('config')" data-s="config">⚙️ GitHub / Config</div>
+
+    <div class="sb-bottom">
+      <a href="../index.html" target="_blank">↗ Ver sitio web</a>
+      <button class="sb-logout" onclick="doLogout()">Cerrar sesión</button>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <div class="cms-main">
+
+    <!-- TOPBAR -->
+    <div class="topbar">
+      <div class="topbar-left">
+        <div class="topbar-section-name" id="topbar-name">Hero</div>
+        <div class="topbar-status" id="topbar-status">
+          <span class="status-dot dot-warn"></span>
+          <span>Cargando...</span>
+        </div>
+      </div>
+      <div class="topbar-actions">
+        <a href="../index.html" target="_blank" class="btn-outline">↗ Sitio</a>
+        <button class="btn-save" id="btn-main-save" onclick="saveAll()" disabled>Guardar cambios</button>
+      </div>
+    </div>
+
+    <!-- TOAST -->
+    <div id="toast"></div>
+
+    <!-- ── HERO ── -->
+    <div class="cms-section active" id="sec-hero">
+      <div class="field-card">
+        <div class="field-card-header"><h3>🏠 Hero — Portada</h3></div>
+        <div class="fg"><label>Badge (texto arriba del título)</label><input id="h-badge" type="text" /></div>
+        <div class="fg-row">
+          <div class="fg"><label>Título — línea 1</label><input id="h-t1" type="text" /></div>
+          <div class="fg"><label>Título — línea 2 (en negrita/morado)</label><input id="h-t2" type="text" /></div>
+        </div>
+        <div class="fg"><label>Subtítulo</label><textarea id="h-sub"></textarea></div>
+        <div class="fg-row">
+          <div class="fg"><label>Botón primario</label><input id="h-cta1" type="text" /></div>
+          <div class="fg"><label>Botón secundario</label><input id="h-cta2" type="text" /></div>
+        </div>
+      </div>
+      <div class="field-card">
+        <div class="field-card-header">
+          <h3>📊 Estadísticas</h3>
+          <button class="btn-add-row" style="width:auto;padding:7px 16px;" onclick="addStat()">+ Agregar</button>
+        </div>
+        <div class="repeat-list" id="stats-list"></div>
+      </div>
+    </div>
+
+    <!-- ── ABOUT ── -->
+    <div class="cms-section" id="sec-about">
+      <div class="field-card">
+        <div class="field-card-header"><h3>💜 Nosotras</h3></div>
+        <div class="fg"><label>Título de sección</label><input id="a-title" type="text" /></div>
+        <div class="fg"><label>Texto principal</label><textarea id="a-text" style="min-height:100px;"></textarea></div>
+      </div>
+      <div class="field-card">
+        <div class="field-card-header">
+          <h3>🌟 Valores</h3>
+          <button class="btn-add-row" style="width:auto;padding:7px 16px;" onclick="addValue()">+ Agregar</button>
+        </div>
+        <div class="repeat-list" id="values-list"></div>
+      </div>
+    </div>
+
+    <!-- ── SERVICIOS ── -->
+    <div class="cms-section" id="sec-services">
+      <div class="field-card">
+        <div class="field-card-header">
+          <h3>🔧 Servicios</h3>
+          <button class="btn-add-row" style="width:auto;padding:7px 16px;" onclick="addService()">+ Agregar</button>
+        </div>
+        <div class="repeat-list" id="services-list"></div>
+      </div>
+    </div>
+
+    <!-- ── TESTIMONIOS ── -->
+    <div class="cms-section" id="sec-testimonials">
+      <div class="field-card">
+        <div class="field-card-header">
+          <h3>⭐ Testimonios</h3>
+          <button class="btn-add-row" style="width:auto;padding:7px 16px;" onclick="addTestimonial()">+ Agregar</button>
+        </div>
+        <div class="repeat-list" id="test-list"></div>
+      </div>
+    </div>
+
+    <!-- ── CONTACTO ── -->
+    <div class="cms-section" id="sec-contact">
+      <div class="field-card">
+        <div class="field-card-header"><h3>📲 Datos de contacto</h3></div>
+        <div class="fg-row">
+          <div class="fg">
+            <label>WhatsApp (solo números, con código de país)</label>
+            <input id="c-wa" type="text" placeholder="5491158708626" />
+            <div class="fg-hint">Sin +, sin espacios. Ej: 5491158708626</div>
+          </div>
+          <div class="fg">
+            <label>Instagram (sin @)</label>
+            <input id="c-ig" type="text" placeholder="electrilindas" />
+          </div>
+        </div>
+        <div class="fg-row">
+          <div class="fg"><label>Email (opcional)</label><input id="c-email" type="email" /></div>
+          <div class="fg"><label>Dirección / Zona</label><input id="c-addr" type="text" /></div>
+        </div>
+      </div>
+      <div class="field-card">
+        <div class="field-card-header"><h3>🌐 Meta / SEO</h3></div>
+        <div class="fg-row">
+          <div class="fg"><label>Nombre del sitio</label><input id="m-name" type="text" /></div>
+          <div class="fg"><label>Tagline</label><input id="m-tag" type="text" /></div>
+        </div>
+        <div class="fg"><label>Texto del footer</label><input id="m-footer" type="text" /></div>
+      </div>
+    </div>
+
+    <!-- ── CONFIG ── -->
+    <div class="cms-section" id="sec-config">
+
+      <div class="config-info">
+        <h4>¿Cómo funciona el guardado?</h4>
+        <p>
+          Al hacer clic en <strong>Guardar cambios</strong>, este panel commitea
+          <code>content.json</code> directamente a tu repositorio de GitHub via API.
+          Netlify detecta el commit y redeploya el sitio en ~30 segundos.
+        </p>
+        <ol>
+          <li>El repositorio ya está configurado: <strong>hannaajin/electrilindas</strong></li>
+          <li>Ingresá tu Personal Access Token una vez (se guarda en tu navegador)</li>
+          <li>Desde ahí, cada "Guardar cambios" actualiza el sitio automáticamente</li>
+        </ol>
+      </div>
+
+      <div class="field-card">
+        <div class="field-card-header"><h3>🔑 Token de GitHub</h3></div>
+        <div class="token-warn">
+          ⚠️ <strong>No compartas este token.</strong> Se guarda solo en tu navegador (localStorage)
+          y nunca se sube al repositorio. Si alguna vez lo compartís, andá a
+          <a href="https://github.com/settings/tokens" target="_blank" style="color:#92400e;">github.com/settings/tokens</a>
+          y eliminalo para crear uno nuevo.
+        </div>
+        <div class="fg">
+          <label>Personal Access Token (ghp_...)</label>
+          <input id="cfg-token" type="password" placeholder="ghp_xxxxxxxxxxxxxxxxxxxxxx" />
+          <div class="fg-hint">
+            Necesitás un token con permiso <strong>repo</strong>.
+            Creá uno en: <a href="https://github.com/settings/tokens/new?scopes=repo" target="_blank">github.com/settings/tokens/new</a>
+          </div>
+        </div>
+        <div class="fg-row">
+          <div class="fg">
+            <label>Usuario de GitHub</label>
+            <input id="cfg-owner" type="text" value="hannaajin" />
+          </div>
+          <div class="fg">
+            <label>Nombre del repositorio</label>
+            <input id="cfg-repo" type="text" value="electrilindas" />
+          </div>
+        </div>
+        <div class="fg" style="max-width:200px;">
+          <label>Rama (branch)</label>
+          <input id="cfg-branch" type="text" value="main" />
+        </div>
+        <button class="btn-save" onclick="saveConfig()" style="margin-top:4px;">Guardar configuración</button>
+      </div>
+
+    </div>
+
+  </div><!-- /cms-main -->
+</div><!-- /cms-screen -->
+
+<script>
+/* ══════════════════════════════════════════════
+   CONSTANTES
+══════════════════════════════════════════════ */
+const PASS     = 'electrilindas2026';
+const GH_DEF   = { owner: 'hannaajin', repo: 'electrilindas', branch: 'main' };
+const SESSION_KEY = 'el_session';
+const TOKEN_KEY   = 'el_gh_token';
+const OWNER_KEY   = 'el_gh_owner';
+const REPO_KEY    = 'el_gh_repo';
+const BRANCH_KEY  = 'el_gh_branch';
+
+let DATA  = {};
+let GH    = {};
+
+/* ══════════════════════════════════════════════
+   LOGIN
+══════════════════════════════════════════════ */
+function doLogin() {
+  const val = document.getElementById('pw-input').value;
+  if (val === PASS) {
+    sessionStorage.setItem(SESSION_KEY, '1');
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('cms-screen').classList.add('show');
+    initCMS();
+  } else {
+    document.getElementById('login-error').classList.add('show');
+    document.getElementById('pw-input').value = '';
+    document.getElementById('pw-input').focus();
+  }
+}
+
+function doLogout() {
+  sessionStorage.removeItem(SESSION_KEY);
+  document.getElementById('cms-screen').classList.remove('show');
+  document.getElementById('login-screen').style.display = 'flex';
+  document.getElementById('pw-input').value = '';
+  document.getElementById('login-error').classList.remove('show');
+}
+
+/* Recordar sesión entre recargas (sin cerrar pestaña) */
+(function checkSession() {
+  if (sessionStorage.getItem(SESSION_KEY) === '1') {
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('cms-screen').classList.add('show');
+    initCMS();
+  }
+})();
+
+/* ══════════════════════════════════════════════
+   INIT CMS
+══════════════════════════════════════════════ */
+function initCMS() {
+  loadGH();
+  setTopbarStatus();
+  loadContent();
+}
+
+/* ── GitHub config ── */
+function loadGH() {
+  GH.token  = localStorage.getItem(TOKEN_KEY)  || '';
+  GH.owner  = localStorage.getItem(OWNER_KEY)  || GH_DEF.owner;
+  GH.repo   = localStorage.getItem(REPO_KEY)   || GH_DEF.repo;
+  GH.branch = localStorage.getItem(BRANCH_KEY) || GH_DEF.branch;
+
+  const tEl = document.getElementById('cfg-token');
+  if (tEl) tEl.value = GH.token ? '••••••••••••••••••••' : '';
+  setVal('cfg-owner',  GH.owner);
+  setVal('cfg-repo',   GH.repo);
+  setVal('cfg-branch', GH.branch);
+}
+
+function saveConfig() {
+  const raw = document.getElementById('cfg-token').value.trim();
+  if (raw && !raw.startsWith('•')) {
+    GH.token = raw;
+    localStorage.setItem(TOKEN_KEY, raw);
+  }
+  GH.owner  = getVal('cfg-owner')  || GH_DEF.owner;
+  GH.repo   = getVal('cfg-repo')   || GH_DEF.repo;
+  GH.branch = getVal('cfg-branch') || GH_DEF.branch;
+  localStorage.setItem(OWNER_KEY,  GH.owner);
+  localStorage.setItem(REPO_KEY,   GH.repo);
+  localStorage.setItem(BRANCH_KEY, GH.branch);
+  setTopbarStatus();
+  toast('✅ Configuración guardada', 'ok');
+}
+
+function setTopbarStatus() {
+  const el = document.getElementById('topbar-status');
+  if (!el) return;
+  if (GH.token && GH.owner && GH.repo) {
+    el.innerHTML = `<span class="status-dot dot-ok"></span> Conectado · ${GH.owner}/${GH.repo} · ${GH.branch}`;
+  } else {
+    el.innerHTML = `<span class="status-dot dot-warn"></span> Token no configurado — ir a ⚙️ Config`;
+  }
+}
+
+/* ══════════════════════════════════════════════
+   CARGAR content.json
+══════════════════════════════════════════════ */
+async function loadContent() {
+  const btn = document.getElementById('btn-main-save');
+  try {
+    let json;
+    if (GH.token && GH.owner && GH.repo) {
+      const res = await fetch(
+        `https://api.github.com/repos/${GH.owner}/${GH.repo}/contents/content.json?ref=${GH.branch}&t=${Date.now()}`,
+        { headers: { Authorization: `token ${GH.token}`, Accept: 'application/vnd.github.v3+json' } }
+      );
+      if (!res.ok) throw new Error(`GitHub ${res.status}`);
+      const meta = await res.json();
+      json = JSON.parse(atob(meta.content.replace(/\n/g, '')));
+    } else {
+      const res = await fetch('../content.json?v=' + Date.now());
+      if (!res.ok) throw new Error('No se encontró content.json local');
+      json = await res.json();
+    }
+    DATA = json;
+    fillForms();
+    btn.disabled = false;
+    toast('Contenido cargado ✓', 'ok');
+  } catch(e) {
+    console.error(e);
+    toast('⚠️ No se pudo cargar: ' + e.message, 'err');
+    btn.disabled = false;
+  }
+}
+
+/* ══════════════════════════════════════════════
+   RELLENAR FORMULARIOS
+══════════════════════════════════════════════ */
+function fillForms() {
+  const h = DATA.hero    || {};
+  const a = DATA.about   || {};
+  const c = DATA.contact || {};
+  const m = DATA.meta    || {};
+
+  setVal('h-badge', h.badge);
+  setVal('h-t1',    h.titleLine1);
+  setVal('h-t2',    h.titleLine2);
+  setVal('h-sub',   h.subtitle);
+  setVal('h-cta1',  h.ctaPrimary);
+  setVal('h-cta2',  h.ctaSecondary);
+  renderStats(h.stats || []);
+
+  setVal('a-title', a.title);
+  setVal('a-text',  a.text);
+  renderValues(a.values || []);
+
+  renderServices(DATA.services || []);
+  renderTests(DATA.testimonials || []);
+
+  setVal('c-wa',    c.whatsapp);
+  setVal('c-ig',    c.instagram);
+  setVal('c-email', c.email);
+  setVal('c-addr',  c.address);
+
+  setVal('m-name',   m.siteName);
+  setVal('m-tag',    m.tagline);
+  setVal('m-footer', m.footerText);
+}
+
+/* ══════════════════════════════════════════════
+   RENDER LISTS
+══════════════════════════════════════════════ */
+function renderStats(arr) {
+  document.getElementById('stats-list').innerHTML = arr.map((s,i) => `
+    <div class="ri">
+      <div class="ri-head"><span>Estadística #${i+1}</span><button class="btn-del" onclick="removeStat(${i})">✕</button></div>
+      <div class="fg-row">
+        <div class="fg"><label>Número</label><input class="st-num" value="${x(s.num)}" /></div>
+        <div class="fg"><label>Etiqueta</label><input class="st-lbl" value="${x(s.label)}" /></div>
+      </div>
+    </div>`).join('');
+}
+function addStat()       { const a = colStats();    a.push({num:'',label:''}); renderStats(a); }
+function removeStat(i)   { const a = colStats();    a.splice(i,1); renderStats(a); }
+function colStats()      { return [...document.querySelectorAll('#stats-list .ri')].map(r=>({ num: r.querySelector('.st-num')?.value||'', label: r.querySelector('.st-lbl')?.value||'' })); }
+
+function renderValues(arr) {
+  document.getElementById('values-list').innerHTML = arr.map((v,i) => `
+    <div class="ri">
+      <div class="ri-head"><span>Valor #${i+1}</span><button class="btn-del" onclick="removeValue(${i})">✕</button></div>
+      <div class="fg-row">
+        <div class="fg"><label>Emoji</label><input class="vl-ic" value="${x(v.icon)}" /></div>
+        <div class="fg"><label>Título</label><input class="vl-ti" value="${x(v.title)}" /></div>
+      </div>
+      <div class="fg"><label>Descripción</label><input class="vl-tx" value="${x(v.text)}" /></div>
+    </div>`).join('');
+}
+function addValue()      { const a = colValues();  a.push({icon:'',title:'',text:''}); renderValues(a); }
+function removeValue(i)  { const a = colValues();  a.splice(i,1); renderValues(a); }
+function colValues()     { return [...document.querySelectorAll('#values-list .ri')].map(r=>({ icon: r.querySelector('.vl-ic')?.value||'', title: r.querySelector('.vl-ti')?.value||'', text: r.querySelector('.vl-tx')?.value||'' })); }
+
+function renderServices(arr) {
+  document.getElementById('services-list').innerHTML = arr.map((s,i) => `
+    <div class="ri">
+      <div class="ri-head"><span>Servicio #${i+1}</span><button class="btn-del" onclick="removeService(${i})">✕</button></div>
+      <div class="fg-row">
+        <div class="fg"><label>Emoji</label><input class="sv-ic" value="${x(s.icon)}" /></div>
+        <div class="fg"><label>Tag/Etiqueta</label><input class="sv-tg" value="${x(s.tag)}" /></div>
+      </div>
+      <div class="fg"><label>Nombre</label><input class="sv-nm" value="${x(s.name)}" /></div>
+      <div class="fg"><label>Descripción</label><textarea class="sv-ds">${x(s.desc)}</textarea></div>
+    </div>`).join('');
+}
+function addService()    { const a = colServices(); a.push({icon:'',tag:'',name:'',desc:''}); renderServices(a); }
+function removeService(i){ const a = colServices(); a.splice(i,1); renderServices(a); }
+function colServices()   { return [...document.querySelectorAll('#services-list .ri')].map(r=>({ icon: r.querySelector('.sv-ic')?.value||'', tag: r.querySelector('.sv-tg')?.value||'', name: r.querySelector('.sv-nm')?.value||'', desc: r.querySelector('.sv-ds')?.value||'' })); }
+
+function renderTests(arr) {
+  document.getElementById('test-list').innerHTML = arr.map((t,i) => `
+    <div class="ri">
+      <div class="ri-head"><span>Testimonio #${i+1}</span><button class="btn-del" onclick="removeTest(${i})">✕</button></div>
+      <div class="fg"><label>Texto</label><textarea class="ts-tx">${x(t.text)}</textarea></div>
+      <div class="fg-row">
+        <div class="fg"><label>Nombre</label><input class="ts-au" value="${x(t.author)}" /></div>
+        <div class="fg"><label>Rol / Zona</label><input class="ts-ro" value="${x(t.role)}" /></div>
+      </div>
+    </div>`).join('');
+}
+function addTestimonial(){ const a = colTests();    a.push({text:'',author:'',role:''}); renderTests(a); }
+function removeTest(i)   { const a = colTests();    a.splice(i,1); renderTests(a); }
+function colTests()      { return [...document.querySelectorAll('#test-list .ri')].map(r=>({ text: r.querySelector('.ts-tx')?.value||'', author: r.querySelector('.ts-au')?.value||'', role: r.querySelector('.ts-ro')?.value||'' })); }
+
+/* ══════════════════════════════════════════════
+   GUARDAR EN GITHUB
+══════════════════════════════════════════════ */
+function buildJSON() {
+  return {
+    hero: {
+      badge:        getVal('h-badge'),
+      titleLine1:   getVal('h-t1'),
+      titleLine2:   getVal('h-t2'),
+      subtitle:     getVal('h-sub'),
+      ctaPrimary:   getVal('h-cta1'),
+      ctaSecondary: getVal('h-cta2'),
+      stats:        colStats()
+    },
+    about: {
+      title:  getVal('a-title'),
+      text:   getVal('a-text'),
+      values: colValues()
+    },
+    services:     colServices(),
+    testimonials: colTests(),
+    contact: {
+      whatsapp:  getVal('c-wa'),
+      instagram: getVal('c-ig'),
+      email:     getVal('c-email'),
+      address:   getVal('c-addr')
+    },
+    meta: {
+      siteName:   getVal('m-name'),
+      tagline:    getVal('m-tag'),
+      footerText: getVal('m-footer')
+    }
+  };
+}
+
+async function saveAll() {
+  const btn = document.getElementById('btn-main-save');
+  const json = buildJSON();
+  const jsonStr = JSON.stringify(json, null, 2);
+  DATA = json;
+
+  if (!GH.token || !GH.owner || !GH.repo) {
+    downloadJSON(jsonStr);
+    toast('⚠️ Sin token — descargando archivo. Subilo manualmente.', 'err');
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = 'Guardando...';
+  toast('⏳ Enviando a GitHub...', '');
+
+  try {
+    // Obtener SHA actual del archivo
+    const getRes = await fetch(
+      `https://api.github.com/repos/${GH.owner}/${GH.repo}/contents/content.json?ref=${GH.branch}`,
+      { headers: { Authorization: `token ${GH.token}`, Accept: 'application/vnd.github.v3+json' } }
+    );
+    let sha = '';
+    if (getRes.ok) { sha = (await getRes.json()).sha || ''; }
+
+    // Commit
+    const body = {
+      message: '✏️ CMS: actualizar contenido',
+      content: btoa(unescape(encodeURIComponent(jsonStr))),
+      branch:  GH.branch
+    };
+    if (sha) body.sha = sha;
+
+    const putRes = await fetch(
+      `https://api.github.com/repos/${GH.owner}/${GH.repo}/contents/content.json`,
+      {
+        method: 'PUT',
+        headers: {
+          Authorization: `token ${GH.token}`,
+          Accept: 'application/vnd.github.v3+json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(body)
+      }
+    );
+
+    if (!putRes.ok) {
+      const err = await putRes.json();
+      throw new Error(err.message || `HTTP ${putRes.status}`);
+    }
+
+    toast('✅ Guardado. Netlify desplegará en ~30 segundos.', 'ok');
+  } catch(e) {
+    console.error(e);
+    toast('❌ Error: ' + e.message, 'err');
+    downloadJSON(jsonStr);
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Guardar cambios';
+  }
+}
+
+function downloadJSON(str) {
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([str], {type:'application/json'}));
+  a.download = 'content.json';
+  a.click();
+}
+
+/* ══════════════════════════════════════════════
+   NAVEGACIÓN DE SECCIONES
+══════════════════════════════════════════════ */
+const SECTION_NAMES = { hero:'Hero', about:'Nosotras', services:'Servicios', testimonials:'Testimonios', contact:'Contacto', config:'Configuración' };
+
+function goTo(name) {
+  document.querySelectorAll('.cms-section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.sb-item').forEach(s => s.classList.remove('active'));
+  const sec = document.getElementById('sec-' + name);
+  if (sec) sec.classList.add('active');
+  const item = document.querySelector(`.sb-item[data-s="${name}"]`);
+  if (item) item.classList.add('active');
+  const nameEl = document.getElementById('topbar-name');
+  if (nameEl) nameEl.textContent = SECTION_NAMES[name] || name;
+}
+
+/* ══════════════════════════════════════════════
+   TOAST
+══════════════════════════════════════════════ */
+let toastTimer;
+function toast(msg, type) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.className = 'show' + (type ? ' ' + type : '');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => { el.className = ''; }, 4000);
+}
+
+/* ══════════════════════════════════════════════
+   HELPERS
+══════════════════════════════════════════════ */
+function getVal(id) { return (document.getElementById(id)?.value || '').trim(); }
+function setVal(id, val) { const e = document.getElementById(id); if (e && val !== undefined && val !== null) e.value = val; }
+function x(s) { return (s||'').toString().replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+</script>
+</body>
+</html>
