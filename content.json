@@ -1,10 +1,10 @@
 {
   "hero": {
-    "badge": "Mujeres en oficios Â· Buenos Aires",
+    "badge": "Mujeres en oficios · Buenos Aires",
     "titleLine1": "Hacemos el trabajo,",
     "titleLine2": "y lo hacemos bien.",
-    "subtitle": "Electricistas, gasistas, plomeras, albaÃ±ilas y mÃ¡s. Mujeres matriculadas y capacitadas que llevan sus oficios a tu hogar con confianza y responsabilidad.",
-    "ctaPrimary": "PedÃ­ tu turno",
+    "subtitle": "Electricistas, gasistas, plomeras, albañilas y más. Mujeres matriculadas y capacitadas que llevan sus oficios a tu hogar con confianza y responsabilidad.",
+    "ctaPrimary": "Pedí­ tu turno",
     "ctaSecondary": "Ver servicios",
     "stats": [
       {
@@ -27,11 +27,11 @@
   },
   "about": {
     "title": "Un proyecto que impulsa la presencia de mujeres en oficios.",
-    "text": "Electrilindas naciÃ³ para darle espacio a mujeres que quieren trabajar en oficios y muchas veces se encuentran con puertas cerradas. Brindamos trabajo, capacitaciÃ³n y contenciÃ³n para que cada profesional pueda desarrollarse en un ambiente seguro, solidario y sin prejuicios. Nuestros clientes reciben un servicio de calidad, y nuestras profesionales crecen en un rubro que histÃ³ricamente las excluyÃ³.",
+    "text": "Electrilindas nació para darle espacio a mujeres que quieren trabajar en oficios y muchas veces se encuentran con puertas cerradas. Brindamos trabajo, capacitación y contención para que cada profesional pueda desarrollarse en un ambiente seguro, solidario y sin prejuicios. Nuestros clientes reciben un servicio de calidad, y nuestras profesionales crecen en un rubro que históricamente las excluyó.",
     "values": [
       {
         "icon": "",
-        "title": "CompaÃ±erismo",
+        "title": "Compañerismo",
         "text": "Nos apoyamos entre nosotras y construimos juntas."
       },
       {
@@ -56,78 +56,78 @@
       "icon": "",
       "tag": "Matriculadas",
       "name": "Electricistas",
-      "desc": "Instalaciones domiciliarias, tableros, bocas de luz y mÃ¡s. Todas matriculadas."
+      "desc": "Instalaciones domiciliarias, tableros, bocas de luz y más. Todas matriculadas."
     },
     {
       "icon": "",
       "tag": "Habilitadas",
       "name": "Gasistas",
-      "desc": "InstalaciÃ³n y revisiÃ³n de caÃ±erÃ­as, artefactos y conexiones de gas. Habilitadas."
+      "desc": "Instalación y revisión de cañerías, artefactos y conexiones de gas. Habilitadas."
     },
     {
       "icon": "",
       "tag": "Domiciliario",
       "name": "Plomeras",
-      "desc": "Destapes, instalaciones sanitarias, reparaciÃ³n de pÃ©rdidas y caÃ±erÃ­as."
+      "desc": "Destapes, instalaciones sanitarias, reparación de pérdidas y cañerí­as."
     },
     {
       "icon": "",
       "tag": "Profesional",
       "name": "Arquitectas y MMO",
-      "desc": "DirecciÃ³n de obra, reformas, presupuestos y planos a cargo de profesionales."
+      "desc": "Dirección de obra, reformas, presupuestos y planos a cargo de profesionales."
     },
     {
       "icon": "",
       "tag": "Interior / Exterior",
       "name": "Pintoras",
-      "desc": "Interior, exterior, preparaciÃ³n de superficies y terminaciones de calidad."
+      "desc": "Interior, exterior, preparación de superficies y terminaciones de calidad."
     },
     {
       "icon": "",
       "tag": "Reformas",
-      "name": "AlbaÃ±ilas",
-      "desc": "Revoques, contrapiso, zÃ³calos, cerÃ¡micos y trabajos de albaÃ±ilerÃ­a en general."
+      "name": "Albañilas",
+      "desc": "Revoques, contrapiso, zócalos, cerámicos y trabajos de albañilería en general."
     },
     {
       "icon": "",
       "tag": "24 hs",
       "name": "Cerrajeras",
-      "desc": "Apertura de puertas, cambio de bombines, duplicado de llaves y mÃ¡s."
+      "desc": "Apertura de puertas, cambio de bombines, duplicado de llaves y más."
     },
     {
       "icon": "",
       "tag": "A medida",
       "name": "Herreras",
-      "desc": "Rejas, puertas de hierro, portones y estructuras metÃ¡licas a medida."
+      "desc": "Rejas, puertas de hierro, portones y estructuras metálicas a medida."
     },
     {
       "icon": "",
       "tag": "Exterior",
       "name": "Jardineras",
-      "desc": "DiseÃ±o, mantenimiento, plantaciÃ³n y limpieza de jardines y patios."
+      "desc": "Diseño, mantenimiento, plantación y limpieza de jardines y patios."
     },
     {
       "icon": "",
       "tag": "A medida",
       "name": "Carpinteras",
-      "desc": "Muebles a medida, reparaciones, instalaciÃ³n de pisos y terminaciones en madera."
+      "desc": "Muebles a medida, reparaciones, instalación de pisos y terminaciones en madera."
     }
   ],
   "testimonials": [
     {
-      "text": "LlamÃ© a Electrilindas para un problema en el tablero y llegÃ³ una electricista en menos de dos horas. Profesional, rÃ¡pida y sÃºper amable. RecomendadÃ­simas.",
-      "author": "Mariana RÃ­os",
-      "role": "Clienta Â· CABA"
+      "text": "Llamé a Electrilindas para un problema en el tablero y llegó una electricista en menos de dos horas. Profesional, rápida y súper amable. Recomendadí­simas.",
+      "author": "Mariana Rí­os",
+      "role": "Clienta · CABA"
     },
     {
-      "text": "Me hicieron toda la pintura del departamento. QuedÃ³ impecable y respetaron los tiempos al pie de la letra. Me sorprendiÃ³ la calidad del trabajo.",
-      "author": "LucÃ­a FernÃ¡ndez",
-      "role": "Clienta Â· Palermo"
+      "text": "Me hicieron toda la pintura del departamento. Quedó impecable y respetaron los tiempos al pie de la letra. Me sorprendió la calidad del trabajo.",
+      "author": "Lucía Fernández",
+      "role": "Clienta · Palermo"
     },
     {
-      "text": "ContratÃ© a la gasista para revisar las conexiones de la cocina. Me explicÃ³ todo, me dio un presupuesto claro y solucionÃ³ el problema ese mismo dÃ­a.",
-      "author": "Claudia MÃ©ndez",
-      "role": "Clienta Â· Caballito"
+      "text": "Contraté a una gasista para revisar las conexiones de la cocina. Me explicó todo, me dio un presupuesto claro y solucionó el problema ese mismo dí­a.",
+      "author": "Claudia Méndez",
+      "role": "Clienta · Caballito"
     }
   ],
   "contact": {
@@ -139,6 +139,6 @@
   "meta": {
     "siteName": "Electrilindas",
     "tagline": "Mujeres en oficios",
-    "footerText": "Â© 2025 Electrilindas Â· Mujeres en oficios Â· Buenos Aires"
+    "footerText": "© 2025 Electrilindas · Mujeres en oficios · Buenos Aires"
   }
 }
